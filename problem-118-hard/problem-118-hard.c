@@ -6,10 +6,10 @@
 #include <math.h>
 
 #define POPULATION_SIZE 50
-#define MAX_GENERATIONS 1000
-#define CULL_RATE 10
+#define MAX_GENERATIONS 200
+#define CULL_RATE 15
 #define PARENT_RATE 5
-#define MUTATION_RATE .3
+#define MUTATION_RATE 1
 
 #define STANDARD_DEVIATION_CUTOFF 5
 
@@ -109,17 +109,13 @@ char *best_cipher(void){
     bool cont;
 
     for(i=0; i<PARENT_RATE; i++){
-      int pick = rand() % s;
-      
-      for(j=0; j<POPULATION_SIZE-CULL_RATE; j++){
-        
-        if(pick <= p->individuals[j]->fitness){
-          swap(p->individuals[j], p->individuals[i]);
-          break;
+      int max_index = 0;
+      for(j=0; j<(POPULATION_SIZE-i); j++){
+        if(p->individuals[j]->fitness > p->individuals[max_index]->fitness){
+          max_index = j;
         }
-          
-        pick -= p->individuals[j]->fitness;
       }
+      swap(p->individuals[max_index], p->individuals[i]);
     }
     
     //replenish population with said pairs
